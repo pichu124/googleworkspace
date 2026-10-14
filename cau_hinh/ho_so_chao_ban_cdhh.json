@@ -1,35 +1,15 @@
 {
-  "_ghi_chu": "Cấu trúc VÍ DỤ cho hồ sơ chào bán thêm cổ phiếu cho cổ đông hiện hữu. Sửa tên/thứ tự thư mục cho khớp danh mục hồ sơ thực tế của từng đợt. Biến: {MA_CK} (truyền bằng --bien MA_CK=...), {NGAY} = ngày chạy dạng ddmmyyyy.",
+  "_ghi_chu": "Theo cách nhóm đã làm ở đợt PDR 05/2026: mỗi quyển là một thư mục, file đặt thẳng trong quyển và đặt tên bắt đầu bằng STT trong Danh mục (vd. '01. Giay dang ky chao ban.pdf'). Mục nào có nhiều file thì làm thư mục con, như mục 10 Điều lệ. Biến: {MA_CK} (--bien MA_CK=...), {NGAY} = ngày chạy dạng ddmmyyyy (đổi bằng --bien NGAY=...).",
   "ten_thu_muc_goc": "Tài liệu {MA_CK} - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _{NGAY}",
   "thu_muc_con": [
-    { "ten": "00. Danh mục hồ sơ" },
     {
       "ten": "Quyển 1/3",
       "thu_muc_con": [
-        { "ten": "01. Giấy đăng ký chào bán" },
-        { "ten": "02. Bản cáo bạch" },
-        { "ten": "03. Nghị quyết ĐHĐCĐ, HĐQT" },
-        { "ten": "04. Giấy chứng nhận ĐKDN" },
-        { "ten": "05. {MA_CK} - Điều lệ công ty" }
+        { "ten": "10.{MA_CK}- Điều lệ công ty" }
       ]
     },
-    {
-      "ten": "Quyển 2/3",
-      "thu_muc_con": [
-        { "ten": "01. Báo cáo kiểm toán tình hình sử dụng vốn" },
-        { "ten": "02. Hợp đồng" },
-        { "ten": "03. Chứng thư thẩm định giá" },
-        { "ten": "04. BCTC quý gần nhất" }
-      ]
-    },
-    {
-      "ten": "Quyển 3/3",
-      "thu_muc_con": [
-        { "ten": "01. BCTC riêng đã kiểm toán" },
-        { "ten": "02. BCTC hợp nhất đã kiểm toán" }
-      ]
-    },
-    { "ten": "99. Nháp và trao đổi nội bộ" }
+    { "ten": "Quyển 2/3" },
+    { "ten": "Quyển 3/3" }
   ],
   "chia_se": [],
   "gui_email_thong_bao": false

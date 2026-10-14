@@ -63,12 +63,13 @@ Kết quả mẫu:
 
 ```
 📁 Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _14102026
-├── 00. Danh mục hồ sơ
-├── Quyển 1/3
-│   ├── 01. Giấy đăng ký chào bán
-│   ├── 02. Bản cáo bạch   ← 1 file
-│   ...
+├── Quyển 1/3   ← 10 file
+│   └── 10.PDR- Điều lệ công ty   ← 2 file
+├── Quyển 2/3   ← 8 file
+└── Quyển 3/3   ← 5 file
 ```
+
+File trên máy nên đặt tên bắt đầu bằng STT trong Danh mục (vd. `01. Giay dang ky chao ban.pdf`, `08. Ban cao bach.pdf`) để trên Drive tự xếp đúng thứ tự.
 
 **Các tuỳ chọn:**
 
@@ -90,10 +91,12 @@ Kết quả mẫu:
 "gui_email_thong_bao": false
 ```
 
-Có sẵn 2 cấu hình **ví dụ** (cần chỉnh cho khớp danh mục hồ sơ thực tế):
+Có sẵn 2 cấu hình:
 
-- `cau_hinh/ho_so_chao_ban_cdhh.json` — hồ sơ chào bán thêm cổ phiếu cho cổ đông hiện hữu (`--bien MA_CK=...`)
-- `cau_hinh/tham_dinh_doanh_nghiep.json` — hồ sơ tìm hiểu/thẩm định doanh nghiệp (`--bien TEN_KH=...`)
+- `cau_hinh/ho_so_chao_ban_cdhh.json` — hồ sơ chào bán thêm cổ phiếu cho cổ đông hiện hữu, theo cách đã làm ở đợt PDR 05/2026: Quyển 1/3, 2/3, 3/3, file đặt thẳng trong quyển, riêng mục 10 Điều lệ có thư mục con (`--bien MA_CK=...`)
+- `cau_hinh/tham_dinh_doanh_nghiep.json` — **ví dụ** hồ sơ tìm hiểu/thẩm định doanh nghiệp (`--bien TEN_KH=...`)
+
+⚠ Nếu truyền `--bien NGAY=...` trùng ngày của một bộ hồ sơ đã có trên Drive, script sẽ dùng lại bộ đó và chỉ thêm phần còn thiếu. Bỏ trống `NGAY` (mặc định là hôm nay) để tạo bộ mới.
 
 ---
 

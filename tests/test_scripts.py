@@ -62,7 +62,7 @@ class TaoHoSoTest(FakeDriveTest):
     def test_chay_thu_khong_goi_drive(self):
         out = self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026", "--chay-thu")
         self.assertIn("Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _19052026", out)
-        self.assertIn("05. PDR - Điều lệ công ty", out)
+        self.assertIn("10.PDR- Điều lệ công ty", out)
         self.assertEqual(self.calls(), [])
 
     def test_thieu_bien(self):
@@ -77,15 +77,15 @@ class TaoHoSoTest(FakeDriveTest):
     def test_tao_local_doi_dau_gach_cheo(self):
         base = self.tmp / "local"
         self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--tao-local", str(base))
-        self.assertTrue((base / "Quyển 1-3" / "02. Bản cáo bạch").is_dir())
-        self.assertTrue((base / "00. Danh mục hồ sơ").is_dir())
+        self.assertTrue((base / "Quyển 1-3" / "10.PDR- Điều lệ công ty").is_dir())
+        self.assertTrue((base / "Quyển 3-3").is_dir())
         self.assertEqual(self.calls(), [])
 
     def test_tao_tai_len_chia_se_va_chay_lai(self):
         base = self.tmp / "local"
         self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--tao-local", str(base))
-        (base / "Quyển 3-3" / "01. BCTC riêng đã kiểm toán" / "BCTC-Rieng-2025.pdf").write_bytes(b"%PDF")
-        (base / "Quyển 3-3" / "01. BCTC riêng đã kiểm toán" / ".DS_Store").write_bytes(b"x")
+        (base / "Quyển 3-3" / "3. BCTC rieng kiem toan 2025.pdf").write_bytes(b"%PDF")
+        (base / "Quyển 3-3" / ".DS_Store").write_bytes(b"x")
         (base / "ghi-chu.txt").write_text("x", encoding="utf-8")
         (base / "Thu muc la").mkdir()
         (base / "Thu muc la" / "a.pdf").write_bytes(b"x")
@@ -104,17 +104,17 @@ class TaoHoSoTest(FakeDriveTest):
         top = self.children(root["id"], files)
         self.assertEqual(
             set(top),
-            {"00. Danh mục hồ sơ", "Quyển 1/3", "Quyển 2/3", "Quyển 3/3", "99. Nháp và trao đổi nội bộ", "ghi-chu.txt"},
+            {"Quyển 1/3", "Quyển 2/3", "Quyển 3/3", "ghi-chu.txt"},
         )
-        bctc = self.children(self.children(top["Quyển 3/3"]["id"], files)["01. BCTC riêng đã kiểm toán"]["id"], files)
-        self.assertEqual(set(bctc), {"BCTC-Rieng-2025.pdf"})
+        bctc = self.children(top["Quyển 3/3"]["id"], files)
+        self.assertEqual(set(bctc), {"3. BCTC rieng kiem toan 2025.pdf"})
         perms = self.drive()["perms"][root["id"]]
         self.assertEqual([(p["emailAddress"], p["role"], p["notify"]) for p in perms],
                          [("dongnghiep@gmail.com", "writer", False)])
         saved = json.loads(ids.read_text(encoding="utf-8"))
         self.assertEqual(saved["thu_muc_goc"]["id"], root["id"])
-        self.assertEqual(saved["thu_muc"]["Quyển 2/3 / 02. Hợp đồng"],
-                         self.children(top["Quyển 2/3"]["id"], files)["02. Hợp đồng"]["id"])
+        self.assertEqual(saved["thu_muc"]["Quyển 1/3 / 10.PDR- Điều lệ công ty"],
+                         self.children(top["Quyển 1/3"]["id"], files)["10.PDR- Điều lệ công ty"]["id"])
 
         # Chạy lại: không tạo trùng thư mục, không tải lại file, không chia sẻ lại.
         before = len(files)
