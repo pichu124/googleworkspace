@@ -1,0 +1,20 @@
+{
+  "_ghi_chu": "Cấu trúc VÍ DỤ cho một hồ sơ tìm hiểu/thẩm định doanh nghiệp (khách hàng chưa niêm yết). Biến: {TEN_KH} (truyền bằng --bien TEN_KH=...), {NGAY} = ngày chạy dạng ddmmyyyy.",
+  "ten_thu_muc_goc": "{TEN_KH} - Thẩm định doanh nghiệp _{NGAY}",
+  "thu_muc_con": [
+    { "ten": "01. Tài liệu công ty cung cấp" },
+    {
+      "ten": "02. Pháp lý",
+      "thu_muc_con": [
+        { "ten": "ĐKDN, Điều lệ" },
+        { "ten": "Nghị quyết, quyết định" }
+      ]
+    },
+    { "ten": "03. Báo cáo tài chính" },
+    { "ten": "04. Nguồn công khai và nghiên cứu" },
+    { "ten": "05. Sản phẩm (Tổng quan, Đánh giá đầu tư)" },
+    { "ten": "99. Trao đổi với khách hàng" }
+  ],
+  "chia_se": [],
+  "gui_email_thong_bao": false
+}

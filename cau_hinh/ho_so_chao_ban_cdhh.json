@@ -1,0 +1,36 @@
+{
+  "_ghi_chu": "Cấu trúc VÍ DỤ cho hồ sơ chào bán thêm cổ phiếu cho cổ đông hiện hữu. Sửa tên/thứ tự thư mục cho khớp danh mục hồ sơ thực tế của từng đợt. Biến: {MA_CK} (truyền bằng --bien MA_CK=...), {NGAY} = ngày chạy dạng ddmmyyyy.",
+  "ten_thu_muc_goc": "Tài liệu {MA_CK} - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _{NGAY}",
+  "thu_muc_con": [
+    { "ten": "00. Danh mục hồ sơ" },
+    {
+      "ten": "Quyển 1/3",
+      "thu_muc_con": [
+        { "ten": "01. Giấy đăng ký chào bán" },
+        { "ten": "02. Bản cáo bạch" },
+        { "ten": "03. Nghị quyết ĐHĐCĐ, HĐQT" },
+        { "ten": "04. Giấy chứng nhận ĐKDN" },
+        { "ten": "05. {MA_CK} - Điều lệ công ty" }
+      ]
+    },
+    {
+      "ten": "Quyển 2/3",
+      "thu_muc_con": [
+        { "ten": "01. Báo cáo kiểm toán tình hình sử dụng vốn" },
+        { "ten": "02. Hợp đồng" },
+        { "ten": "03. Chứng thư thẩm định giá" },
+        { "ten": "04. BCTC quý gần nhất" }
+      ]
+    },
+    {
+      "ten": "Quyển 3/3",
+      "thu_muc_con": [
+        { "ten": "01. BCTC riêng đã kiểm toán" },
+        { "ten": "02. BCTC hợp nhất đã kiểm toán" }
+      ]
+    },
+    { "ten": "99. Nháp và trao đổi nội bộ" }
+  ],
+  "chia_se": [],
+  "gui_email_thong_bao": false
+}

@@ -1,0 +1,96 @@
+{
+  "_ghi_chu": "DỮ LIỆU GIẢ để thử script. Mỗi khoá ứng với một chỗ trống {{KHOA}} trong file mẫu. Danh sách [...] = nhiều đoạn/gạch đầu dòng. Số (không có ngoặc kép) được tự định dạng kiểu Việt Nam: 1160 → 1.160; 732.7 → 732,7. Năm và tỷ lệ nên để trong ngoặc kép.",
+
+  "TEN_CONG_TY": "Công ty Cổ phần Tập đoàn ABC (ví dụ)",
+  "TEN_VIET_TAT": "ABCGroup",
+  "TEN_TRUOC_DAY": "Công ty TNHH ABC (đổi tên năm 2015)",
+  "NGUON_TONG_HOP": "Tổng hợp từ Hồ sơ năng lực do công ty cung cấp và nghiên cứu độc lập từ nguồn công khai",
+  "NGAY_CAP_NHAT": "14/10/2026",
+  "NGUOI_LAP": "Nhóm IB",
+
+  "TOM_TAT": [
+    "ABC là doanh nghiệp tư nhân đa ngành, thành lập năm 2008, vốn điều lệ 1.200 tỷ đồng.",
+    "Ba mảng chính: phân phối vật liệu xây dựng, bất động sản khu công nghiệp, logistics.",
+    "Tài chính: doanh thu 900–1.400 tỷ đồng/năm, đòn bẩy cao (nợ phải trả ~70% tổng tài sản)."
+  ],
+  "NHAN_DINH_NHANH": "Vị thế tốt trong chuỗi cung ứng khu vực; cần làm rõ minh bạch tài chính và cơ cấu sở hữu trước khi tư vấn thu xếp vốn.",
+
+  "QUA_TRINH_DOI_TEN": "Công ty TNHH ABC (2008) → Công ty Cổ phần Tập đoàn ABC (2015)",
+  "MA_SO_DN": "0100000000 (ví dụ)",
+  "NAM_THANH_LAP": "2008",
+  "VON_DIEU_LE": "1.200 tỷ đồng",
+  "NHAN_SU": "Khoảng 1.500 nhân viên",
+  "TRU_SO": "Số 1 Đường Ví Dụ, Hà Nội",
+  "VAN_PHONG_DAI_DIEN": "TP. Hồ Chí Minh; Đà Nẵng",
+  "LIEN_HE": "info@abc-vidu.vn · www.abc-vidu.vn",
+  "LANH_DAO": [
+    "Chủ tịch HĐQT: Ông Nguyễn Văn A",
+    "Tổng Giám đốc: Bà Trần Thị B"
+  ],
+  "CO_DONG": "Ông Nguyễn Văn A 60% · Bà Trần Thị B 25% · Khác 15%",
+  "NGAN_HANG_DOI_TAC": "Ngân hàng X – CN Hà Nội (cấp tín dụng chính)",
+  "NGUON_MUC_2": "HSNL tr. 3–5.",
+
+  "LICH_SU_PHAT_TRIEN": [
+    "2008: Thành lập Công ty TNHH ABC.",
+    "2015: Chuyển đổi thành công ty cổ phần, đổi tên.",
+    "2022: Được chấp thuận chủ trương đầu tư KCN số 1 (120 ha)."
+  ],
+  "BO_MAY_QUAN_TRI": "ĐHĐCĐ – HĐQT (5 thành viên) – Ban Tổng Giám đốc – Ban Kiểm soát.",
+  "DON_VI_THANH_VIEN": [
+    "CTCP ABC Logistics (sở hữu 80%)",
+    "CTCP KCN ABC (sở hữu 51%)"
+  ],
+  "HOAT_DONG_KINH_DOANH": [
+    "Phân phối vật liệu xây dựng: ~60% doanh thu.",
+    "Bất động sản KCN: ~25% doanh thu, đang mở rộng.",
+    "Logistics: ~15% doanh thu."
+  ],
+
+  "GHI_CHU_TAI_CHINH": "Số liệu công ty mẹ theo BCTC kiểm toán; các chỉ số do người lập tính.",
+  "PHAM_VI_SO_LIEU": "công ty mẹ 2021–2025",
+  "BANG_TAI_CHINH": {
+    "_ghi_chu": "Mỗi dòng 5 giá trị → {{DOANH_THU_1}} … {{DOANH_THU_5}}",
+    "NAM":          ["2021", "2022", "2023", "2024", "2025"],
+    "DOANH_THU":    [905, 1120, 1260, 1385, 1340.5],
+    "LNST":         [21.4, 35, 48.2, 52.9, 40.1],
+    "TONG_TAI_SAN": [2450, 2980, 3410, 3760, 3905],
+    "NO_PHAI_TRA":  [1760, 2120, 2390, 2610, 2700],
+    "VAY_NO":       [980, 1240, 1420, 1580, 1610],
+    "CP_LAI_VAY":   [72, 88, 104, 119, 121],
+    "VCSH":         [690, 860, 1020, 1150, 1205],
+    "NO_TTS":       ["72%", "71%", "70%", "69%", "69%"],
+    "VAY_VCSH":     ["1,4x", "1,4x", "1,4x", "1,4x", "1,3x"],
+    "ROE":          ["3,1%", "4,1%", "4,7%", "4,6%", "3,3%"]
+  },
+  "NGUON_MUC_6_1": "BCTC kiểm toán công ty mẹ 2021–2025 (ví dụ).",
+  "LICH_SU_VON": [
+    "2015: 300 tỷ đồng",
+    "2020: 800 tỷ đồng",
+    "2024: 1.200 tỷ đồng"
+  ],
+  "TIN_DUNG_VON": [
+    "Ngân hàng X là ngân hàng cấp tín dụng chính; tài sản bảo đảm gồm quyền sử dụng đất và cổ phần.",
+    "Chưa phát hành trái phiếu doanh nghiệp."
+  ],
+
+  "PHAP_LY_RUI_RO": [
+    "Chưa ghi nhận xử phạt hành chính trọng yếu trong 3 năm gần nhất (ví dụ).",
+    "Rủi ro pháp lý đất đai tại dự án KCN số 1: đang hoàn thiện thủ tục giao đất."
+  ],
+  "DOI_CHIEU": [
+    "HSNL ghi vốn điều lệ 1.500 tỷ đồng; dữ liệu đăng ký doanh nghiệp là 1.200 tỷ đồng."
+  ],
+
+  "DIEM_MANH": ["Vị trí chiến lược trong chuỗi cung ứng khu vực.", "Quỹ đất KCN đã có chủ trương đầu tư."],
+  "DIEM_YEU_RUI_RO": ["Đòn bẩy cao.", "Sở hữu tập trung."],
+  "HAM_Y_IB": ["Cơ hội tư vấn thu xếp vốn cho KCN số 1.", "Cần thẩm định kỹ dòng tiền trước khi đề xuất phát hành."],
+  "CAU_HOI_THAM_DINH": [
+    "1. Giấy chứng nhận ĐKDN mới nhất, điều lệ, danh sách cổ đông.",
+    "2. BCTC hợp nhất kiểm toán 3 năm gần nhất.",
+    "3. Hồ sơ pháp lý dự án KCN số 1."
+  ],
+
+  "NGUON_THAM_KHAO": ["[1] Hồ sơ năng lực công ty (ví dụ).", "[2] Cổng thông tin quốc gia về đăng ký doanh nghiệp."],
+  "PHUONG_PHAP": "Tổng hợp từ tài liệu công ty cung cấp và nguồn công khai; chưa phỏng vấn ban lãnh đạo."
+}

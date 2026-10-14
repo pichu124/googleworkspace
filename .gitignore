@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+
+# Dữ liệu khách hàng — không đưa lên git
+du_lieu/*
+!du_lieu/vi_du_*.json
+ho_so_local/
+*.ids.json
+
+# Thông tin đăng nhập
+.env
+client_secret*.json
+credentials*.json

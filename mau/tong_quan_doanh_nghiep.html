@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>MẪU - Tổng quan doanh nghiệp</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4; }
+  h1 { font-size: 15pt; color: #1f3864; margin-top: 18pt; }
+  h2 { font-size: 12.5pt; color: #1f3864; margin-top: 12pt; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border: 1px solid #9aa5b1; padding: 4pt 6pt; vertical-align: top; }
+  th { background: #dbe5f1; }
+  td.nhan { width: 28%; font-weight: bold; background: #f3f6fa; }
+  td.so { text-align: right; }
+  td.hop { background: #e8f1fb; }
+  p.nguon { font-style: italic; color: #555555; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<p style="text-align:center"><b>HỒ SƠ TỔNG QUAN DOANH NGHIỆP</b></p>
+<p style="text-align:center; font-size:14pt"><b>{{TEN_CONG_TY}}</b></p>
+<p>Tên trước đây: {{TEN_TRUOC_DAY}}</p>
+<p class="nguon">{{NGUON_TONG_HOP}} · Dữ liệu cập nhật đến {{NGAY_CAP_NHAT}}</p>
+
+<p><b>Quy ước trình bày</b></p>
+<table>
+  <tr><td class="nhan">Văn bản thường</td><td>Thông tin trích từ Hồ sơ năng lực (HSNL) do công ty cung cấp. Số trang HSNL ghi ở dòng “Nguồn” cuối mỗi mục.</td></tr>
+  <tr><td class="nhan">Văn bản tô vàng</td><td>Thông tin mới do nghiên cứu độc lập bổ sung. Số trong ngoặc vuông, ví dụ [1], dẫn tới danh mục nguồn ở Phụ lục A.</td></tr>
+  <tr><td class="nhan">Khung nền xanh nhạt</td><td>Nhận định, phân tích của người lập dựa trên cả hai nguồn trên – không phải dữ kiện.</td></tr>
+</table>
+
+<h1>1. Tóm tắt</h1>
+<ul><li>{{TOM_TAT}}</li></ul>
+<table><tr><td class="hop"><b>Nhận định nhanh</b><br>{{NHAN_DINH_NHANH}}</td></tr></table>
+
+<h1>2. Thông tin doanh nghiệp</h1>
+<table>
+  <tr><td class="nhan">Tên công ty</td><td>{{TEN_CONG_TY}}</td></tr>
+  <tr><td class="nhan">Quá trình đổi tên</td><td>{{QUA_TRINH_DOI_TEN}}</td></tr>
+  <tr><td class="nhan">Mã số doanh nghiệp</td><td>{{MA_SO_DN}}</td></tr>
+  <tr><td class="nhan">Năm thành lập</td><td>{{NAM_THANH_LAP}}</td></tr>
+  <tr><td class="nhan">Vốn điều lệ</td><td>{{VON_DIEU_LE}}</td></tr>
+  <tr><td class="nhan">Quy mô nhân sự</td><td>{{NHAN_SU}}</td></tr>
+  <tr><td class="nhan">Trụ sở chính</td><td>{{TRU_SO}}</td></tr>
+  <tr><td class="nhan">Văn phòng đại diện</td><td>{{VAN_PHONG_DAI_DIEN}}</td></tr>
+  <tr><td class="nhan">Liên hệ</td><td>{{LIEN_HE}}</td></tr>
+  <tr><td class="nhan">Lãnh đạo</td><td>{{LANH_DAO}}</td></tr>
+  <tr><td class="nhan">Cổ đông</td><td>{{CO_DONG}}</td></tr>
+  <tr><td class="nhan">Ngân hàng, đối tác</td><td>{{NGAN_HANG_DOI_TAC}}</td></tr>
+</table>
+<p class="nguon">Nguồn: {{NGUON_MUC_2}}</p>
+
+<h1>3. Lịch sử phát triển</h1>
+<ul><li>{{LICH_SU_PHAT_TRIEN}}</li></ul>
+
+<h1>4. Cơ cấu tổ chức và hệ sinh thái</h1>
+<h2>4.1. Bộ máy quản trị</h2>
+<p>{{BO_MAY_QUAN_TRI}}</p>
+<h2>4.2. Đơn vị thành viên</h2>
+<p>{{DON_VI_THANH_VIEN}}</p>
+
+<h1>5. Hoạt động kinh doanh</h1>
+<p>{{HOAT_DONG_KINH_DOANH}}</p>
+
+<h1>6. Tài chính và nguồn vốn</h1>
+<p>{{GHI_CHU_TAI_CHINH}}</p>
+<h2>6.1. Số liệu tài chính {{PHAM_VI_SO_LIEU}}</h2>
+<table>
+  <tr><th>Chỉ tiêu (tỷ đồng)</th><th>{{NAM_1}}</th><th>{{NAM_2}}</th><th>{{NAM_3}}</th><th>{{NAM_4}}</th><th>{{NAM_5}}</th></tr>
+  <tr><td class="nhan">Doanh thu</td><td class="so">{{DOANH_THU_1}}</td><td class="so">{{DOANH_THU_2}}</td><td class="so">{{DOANH_THU_3}}</td><td class="so">{{DOANH_THU_4}}</td><td class="so">{{DOANH_THU_5}}</td></tr>
+  <tr><td class="nhan">Lợi nhuận sau thuế</td><td class="so">{{LNST_1}}</td><td class="so">{{LNST_2}}</td><td class="so">{{LNST_3}}</td><td class="so">{{LNST_4}}</td><td class="so">{{LNST_5}}</td></tr>
+  <tr><td class="nhan">Tổng tài sản</td><td class="so">{{TONG_TAI_SAN_1}}</td><td class="so">{{TONG_TAI_SAN_2}}</td><td class="so">{{TONG_TAI_SAN_3}}</td><td class="so">{{TONG_TAI_SAN_4}}</td><td class="so">{{TONG_TAI_SAN_5}}</td></tr>
+  <tr><td class="nhan">Nợ phải trả</td><td class="so">{{NO_PHAI_TRA_1}}</td><td class="so">{{NO_PHAI_TRA_2}}</td><td class="so">{{NO_PHAI_TRA_3}}</td><td class="so">{{NO_PHAI_TRA_4}}</td><td class="so">{{NO_PHAI_TRA_5}}</td></tr>
+  <tr><td class="nhan">Vay nợ</td><td class="so">{{VAY_NO_1}}</td><td class="so">{{VAY_NO_2}}</td><td class="so">{{VAY_NO_3}}</td><td class="so">{{VAY_NO_4}}</td><td class="so">{{VAY_NO_5}}</td></tr>
+  <tr><td class="nhan">Chi phí lãi vay</td><td class="so">{{CP_LAI_VAY_1}}</td><td class="so">{{CP_LAI_VAY_2}}</td><td class="so">{{CP_LAI_VAY_3}}</td><td class="so">{{CP_LAI_VAY_4}}</td><td class="so">{{CP_LAI_VAY_5}}</td></tr>
+  <tr><td class="nhan">Vốn chủ sở hữu</td><td class="so">{{VCSH_1}}</td><td class="so">{{VCSH_2}}</td><td class="so">{{VCSH_3}}</td><td class="so">{{VCSH_4}}</td><td class="so">{{VCSH_5}}</td></tr>
+  <tr><td class="nhan">Nợ phải trả / Tổng tài sản</td><td class="so">{{NO_TTS_1}}</td><td class="so">{{NO_TTS_2}}</td><td class="so">{{NO_TTS_3}}</td><td class="so">{{NO_TTS_4}}</td><td class="so">{{NO_TTS_5}}</td></tr>
+  <tr><td class="nhan">Vay nợ / Vốn chủ</td><td class="so">{{VAY_VCSH_1}}</td><td class="so">{{VAY_VCSH_2}}</td><td class="so">{{VAY_VCSH_3}}</td><td class="so">{{VAY_VCSH_4}}</td><td class="so">{{VAY_VCSH_5}}</td></tr>
+  <tr><td class="nhan">ROE</td><td class="so">{{ROE_1}}</td><td class="so">{{ROE_2}}</td><td class="so">{{ROE_3}}</td><td class="so">{{ROE_4}}</td><td class="so">{{ROE_5}}</td></tr>
+</table>
+<p class="nguon">Nguồn: {{NGUON_MUC_6_1}}</p>
+<h2>6.2. Lịch sử vốn điều lệ</h2>
+<ul><li>{{LICH_SU_VON}}</li></ul>
+<h2>6.3. Tín dụng và thị trường vốn</h2>
+<ul><li>{{TIN_DUNG_VON}}</li></ul>
+
+<h1>7. Pháp lý, tuân thủ và rủi ro</h1>
+<ul><li>{{PHAP_LY_RUI_RO}}</li></ul>
+
+<h1>8. Đối chiếu Hồ sơ năng lực với nguồn công khai</h1>
+<ul><li>{{DOI_CHIEU}}</li></ul>
+
+<h1>9. Nhận định tổng hợp và gợi ý thẩm định</h1>
+<table><tr><td class="hop"><b>Điểm mạnh</b><br>{{DIEM_MANH}}</td></tr></table>
+<p></p>
+<table><tr><td class="hop"><b>Điểm yếu và rủi ro</b><br>{{DIEM_YEU_RUI_RO}}</td></tr></table>
+<p></p>
+<table><tr><td class="hop"><b>Hàm ý đối với hoạt động IB</b><br>{{HAM_Y_IB}}</td></tr></table>
+<p></p>
+<table><tr><td class="hop"><b>Danh mục tài liệu, câu hỏi đề xuất yêu cầu công ty cung cấp</b><br>{{CAU_HOI_THAM_DINH}}</td></tr></table>
+
+<h1>Phụ lục A. Danh mục nguồn tham khảo</h1>
+<p>{{NGUON_THAM_KHAO}}</p>
+
+<h1>Phụ lục B. Phương pháp và giới hạn</h1>
+<p>{{PHUONG_PHAP}}</p>
+
+<p class="nguon">Người lập: {{NGUOI_LAP}} · Ngày lập: {{HOM_NAY}}</p>
+
+</body>
+</html>
