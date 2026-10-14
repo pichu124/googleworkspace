@@ -63,6 +63,7 @@ Kết quả mẫu:
 
 ```
 📁 Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _14102026
+├── 00. Mới nhận   ← file khách gửi, chờ xếp vào quyển
 ├── Quyển 1/3   ← 10 file
 │   └── 10.PDR- Điều lệ công ty   ← 2 file
 ├── Quyển 2/3   ← 8 file

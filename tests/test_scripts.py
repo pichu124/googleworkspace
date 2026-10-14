@@ -104,7 +104,7 @@ class TaoHoSoTest(FakeDriveTest):
         top = self.children(root["id"], files)
         self.assertEqual(
             set(top),
-            {"Quyển 1/3", "Quyển 2/3", "Quyển 3/3", "ghi-chu.txt"},
+            {"00. Mới nhận", "Quyển 1/3", "Quyển 2/3", "Quyển 3/3", "ghi-chu.txt"},
         )
         bctc = self.children(top["Quyển 3/3"]["id"], files)
         self.assertEqual(set(bctc), {"3. BCTC rieng kiem toan 2025.pdf"})
