@@ -121,7 +121,7 @@ def rows_to_data(rows: list[list[str]]) -> dict[str, str]:
 
 def load_data(args) -> dict[str, str]:
     if args.du_lieu:
-        raw = json.loads(Path(args.du_lieu).read_text(encoding="utf-8"))
+        raw = json.loads(Path(args.du_lieu).read_text(encoding="utf-8-sig"))
         if not isinstance(raw, dict):
             raise SystemExit("File dữ liệu JSON phải là một object {...}.")
         return flatten_json(raw)

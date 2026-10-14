@@ -287,7 +287,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dong-y", "-y", action="store_true", help="Không hỏi xác nhận")
     args = ap.parse_args(argv)
 
-    config = json.loads(Path(args.cau_hinh).read_text(encoding="utf-8"))
+    config = json.loads(Path(args.cau_hinh).read_text(encoding="utf-8-sig"))
     variables = parse_vars(args.bien)
     root = build_tree(config, variables)
     shares = parse_shares(config, args.chia_se)
