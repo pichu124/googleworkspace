@@ -219,7 +219,8 @@ def cmd_tao(args) -> int:
     fields = unique(PLACEHOLDER.findall(template_text))
     malformed = unique(m for m in ANY_BRACES.findall(template_text) if not PLACEHOLDER.fullmatch(m))
     missing = [f for f in fields if f not in values]
-    unused = [k for k in data if k not in fields]
+    name_fields = {f for _, f, _, _ in string.Formatter().parse(args.ten) if f}
+    unused = [k for k in data if k not in fields and k not in name_fields]
 
     name = render_name(args.ten, values)
     dest = args.thu_muc or (meta.get("parents") or ["root"])[0]

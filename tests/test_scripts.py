@@ -151,7 +151,7 @@ class TaoTaiLieuTest(FakeDriveTest):
         out = self.run_script("tao_tai_lieu_tu_mau.py", "tao", "--mau", tid, "--du-lieu", self.DATA,
                               "--ten", self.NAME, "--chay-thu")
         self.assertNotIn("Thiếu dữ liệu", out)
-        self.assertIn("ℹ Dữ liệu không dùng tới (1): TEN_VIET_TAT", out)
+        self.assertNotIn("Dữ liệu không dùng tới", out)  # TEN_VIET_TAT chỉ dùng trong tên file
         self.assertFalse(any(c[:3] == ["drive", "files", "copy"] for c in self.calls()))
 
     def test_tao_tai_lieu_tu_json(self):
