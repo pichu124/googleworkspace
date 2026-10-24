@@ -1,5 +1,6 @@
 {
-  "_ghi_chu": "Cấu trúc VÍ DỤ cho một hồ sơ tìm hiểu/thẩm định doanh nghiệp (khách hàng chưa niêm yết). Biến: {TEN_KH} (truyền bằng --bien TEN_KH=...), {NGAY} = ngày chạy dạng ddmmyyyy.",
+  "_ghi_chu": "Cấu trúc VÍ DỤ cho một hồ sơ tìm hiểu/thẩm định doanh nghiệp (khách hàng chưa niêm yết). Biến: {TEN_KH} (truyền bằng --bien TEN_KH=...), {NGAY} = ngày chạy dạng ddmmyyyy. 'duong_dan_cha' là thư mục (tính từ My Drive) chứa bộ hồ sơ; chưa có thì script tự tạo.",
+  "duong_dan_cha": "01. Công việc/1. Đang làm",
   "ten_thu_muc_goc": "{TEN_KH} - Thẩm định doanh nghiệp _{NGAY}",
   "thu_muc_con": [
     { "ten": "01. Tài liệu công ty cung cấp" },

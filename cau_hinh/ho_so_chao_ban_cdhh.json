@@ -1,5 +1,6 @@
 {
-  "_ghi_chu": "Theo cách nhóm đã làm ở đợt PDR 05/2026: mỗi quyển là một thư mục, file đặt thẳng trong quyển và đặt tên bắt đầu bằng STT trong Danh mục (vd. '01. Giay dang ky chao ban.pdf'). Mục nào có nhiều file thì làm thư mục con, như mục 10 Điều lệ. '00. Mới nhận' là chỗ để file khách gửi (lưu từ Outlook) trước khi xếp vào đúng quyển. Biến: {MA_CK} (--bien MA_CK=...), {NGAY} = ngày chạy dạng ddmmyyyy (đổi bằng --bien NGAY=...).",
+  "_ghi_chu": "Theo cách nhóm đã làm ở đợt PDR 05/2026: mỗi quyển là một thư mục, file đặt thẳng trong quyển và đặt tên bắt đầu bằng STT trong Danh mục (vd. '01. Giay dang ky chao ban.pdf'). Mục nào có nhiều file thì làm thư mục con, như mục 10 Điều lệ. '00. Mới nhận' là chỗ để file khách gửi (lưu từ Outlook) trước khi xếp vào đúng quyển. Biến: {MA_CK} (--bien MA_CK=...), {NGAY} = ngày chạy dạng ddmmyyyy (đổi bằng --bien NGAY=...), {NAM} = năm chạy (đổi bằng --bien NAM=...). Bộ hồ sơ nằm trong 'duong_dan_cha' (tính từ My Drive), mỗi mã một thư mục thương vụ; chưa có thì script tự tạo.",
+  "duong_dan_cha": "01. Công việc/1. Đang làm/{MA_CK} - Chào bán cho CĐHH {NAM}",
   "ten_thu_muc_goc": "Tài liệu {MA_CK} - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _{NGAY}",
   "thu_muc_con": [
     { "ten": "00. Mới nhận" },

@@ -98,6 +98,12 @@ def build_tree(config: dict, variables: dict[str, str]) -> Node:
     return build({"ten": config["ten_thu_muc_goc"], "thu_muc_con": config.get("thu_muc_con", [])}, (), True)
 
 
+def parent_segments(config: dict, variables: dict[str, str]) -> list[str]:
+    """Các cấp thư mục (tính từ My Drive) sẽ chứa bộ hồ sơ, lấy từ khoá "duong_dan_cha"."""
+    raw = config.get("duong_dan_cha", "")
+    return [render(part, variables).strip() for part in raw.split("/") if part.strip()]
+
+
 def parse_vars(pairs: list[str]) -> dict[str, str]:
     today = dt.date.today()
     variables = {"NGAY": today.strftime("%d%m%Y"), "NAM": str(today.year)}
@@ -186,6 +192,20 @@ def print_tree(root: Node, uploads: dict[tuple[str, ...], list[Path]]) -> None:
 # ---------------------------------------------------------------------------
 
 
+def ensure_path(parent_id: str, segments: list[str]) -> str:
+    """Tìm hoặc tạo lần lượt từng cấp thư mục, trả về ID của cấp cuối."""
+    for depth, name in enumerate(segments, 1):
+        label = " / ".join(segments[:depth])
+        found = list_children(parent_id, name=name, mime_type=FOLDER_MIME)
+        if found:
+            parent_id = found[0]["id"]
+            print(f"  = Đã có: {label}")
+        else:
+            parent_id = create_folder(name, parent_id)["id"]
+            print(f"  + Tạo mới: {label}")
+    return parent_id
+
+
 def ensure_folders(root: Node, parent_id: str) -> None:
     def ensure(node: Node, parent: str) -> None:
         found = list_children(parent, name=node.name, mime_type=FOLDER_MIME)
@@ -272,8 +292,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("cau_hinh", help="File cấu hình JSON mô tả cây thư mục (xem thư mục cau_hinh/)")
     ap.add_argument("--bien", action="append", default=[], metavar="TEN=GIATRI",
                     help="Biến dùng trong tên thư mục, vd. --bien MA_CK=PDR. NGAY (ddmmyyyy) và NAM có sẵn.")
-    ap.add_argument("--thu-muc-cha", default="root", metavar="FOLDER_ID",
-                    help="ID thư mục Drive chứa bộ hồ sơ (mặc định: My Drive)")
+    ap.add_argument("--thu-muc-cha", metavar="FOLDER_ID",
+                    help="ID thư mục Drive chứa bộ hồ sơ. Mặc định: theo \"duong_dan_cha\" trong file cấu hình, "
+                         "không có thì để ở My Drive")
     ap.add_argument("--tai-len", type=Path, metavar="THU_MUC_MAY",
                     help="Thư mục trên máy có cùng cấu trúc; file trong đó được tải lên đúng thư mục Drive")
     ap.add_argument("--tao-local", type=Path, metavar="THU_MUC_MAY",
@@ -290,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
     config = json.loads(Path(args.cau_hinh).read_text(encoding="utf-8-sig"))
     variables = parse_vars(args.bien)
     root = build_tree(config, variables)
+    segments = [] if args.thu_muc_cha else parent_segments(config, variables)
     shares = parse_shares(config, args.chia_se)
     notify = bool(config.get("gui_email_thong_bao", False))
 
@@ -308,7 +330,10 @@ def main(argv: list[str] | None = None) -> int:
         for d in unmatched:
             print(f"⚠ Thư mục trên máy không khớp cấu hình, file trong đó sẽ KHÔNG được tải: {d}")
 
-    parent_label = "My Drive" if args.thu_muc_cha == "root" else f"thư mục {args.thu_muc_cha}"
+    if args.thu_muc_cha:
+        parent_label = f"thư mục {args.thu_muc_cha}"
+    else:
+        parent_label = " / ".join(["My Drive", *segments])
     print(f"\nSẽ tạo trong {parent_label}:\n")
     print_tree(root, uploads)
     total = sum(len(v) for v in uploads.values())
@@ -330,8 +355,12 @@ def main(argv: list[str] | None = None) -> int:
 
     errors: list[str] = []
     try:
+        parent_id = args.thu_muc_cha or "root"
+        if segments:
+            print("Vị trí:")
+            parent_id = ensure_path(parent_id, segments)
         print("Thư mục:")
-        ensure_folders(root, args.thu_muc_cha)
+        ensure_folders(root, parent_id)
         if uploads:
             print("File:")
             errors += do_uploads(root, uploads)

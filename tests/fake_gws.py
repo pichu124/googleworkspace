@@ -102,6 +102,7 @@ def main(argv):
         parent = re.search(QUOTED + r" in parents", q)
         name = re.search(r"name = " + QUOTED, q)
         mime = re.search(r"mimeType = " + QUOTED, q)
+        public = "visibility = 'anyoneWithLink'" in q
         hits = [
             {"id": f["id"], "name": f["name"], "mimeType": f["mimeType"]}
             for f in files.values()
@@ -109,6 +110,7 @@ def main(argv):
             and (not parent or unq(parent.group(1)) in f["parents"])
             and (not name or f["name"] == unq(name.group(1)))
             and (not mime or f["mimeType"] == unq(mime.group(1)))
+            and (not public or any(p.get("type") == "anyone" for p in state["perms"].get(f["id"], [])))
         ]
         out({"files": hits})
     elif cmd == ("drive", "files", "create"):
@@ -152,6 +154,12 @@ def main(argv):
                     "notify": params.get("sendNotificationEmail")}
             state["perms"].setdefault(params["fileId"], []).append(perm)
             out({"id": perm["id"]})
+    elif cmd == ("drive", "permissions", "delete"):
+        perms = state["perms"].get(params["fileId"], [])
+        if not any(p["id"] == params["permissionId"] for p in perms):
+            rc = fail(404, "Permission not found")
+        else:
+            state["perms"][params["fileId"]] = [p for p in perms if p["id"] != params["permissionId"]]
     elif cmd == ("docs", "documents", "get"):
         text = files[params["documentId"]]["text"]
         # Cắt chữ thành nhiều textRun, cố ý cắt ngang chỗ trống để thử việc ghép chữ.

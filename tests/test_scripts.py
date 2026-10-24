@@ -55,15 +55,49 @@ class FakeDriveTest(unittest.TestCase):
         files = files or self.drive()["files"]
         return {f["name"]: f for f in files.values() if parent in f["parents"]}
 
+    def find_path(self, *names, files=None):
+        """Đi từ My Drive theo từng tên thư mục, trả về file/thư mục cuối."""
+        node = {"id": "root"}
+        for name in names:
+            node = self.children(node["id"], files)[name]
+        return node
+
 
 class TaoHoSoTest(FakeDriveTest):
     CFG = str(ROOT / "cau_hinh" / "ho_so_chao_ban_cdhh.json")
+    DOSSIER = "Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _19052026"
+    PARENT = ("01. Công việc", "1. Đang làm", "PDR - Chào bán cho CĐHH 2026")
 
     def test_chay_thu_khong_goi_drive(self):
-        out = self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026", "--chay-thu")
-        self.assertIn("Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _19052026", out)
+        out = self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026",
+                              "--bien", "NAM=2026", "--chay-thu")
+        self.assertIn("Sẽ tạo trong My Drive / 01. Công việc / 1. Đang làm / PDR - Chào bán cho CĐHH 2026", out)
+        self.assertIn(self.DOSSIER, out)
         self.assertIn("10.PDR- Điều lệ công ty", out)
         self.assertEqual(self.calls(), [])
+
+    def test_duong_dan_cha_dung_lai_thu_muc_co_san(self):
+        # Thư mục "01. Công việc" đã có sẵn (do người dùng tạo) → dùng lại, chỉ tạo các cấp còn thiếu.
+        self.run_script("tao_ho_so.py", str(self.write_cfg({"ten_thu_muc_goc": "01. Công việc"})), "--dong-y")
+        out = self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026",
+                              "--bien", "NAM=2026", "--dong-y")
+        self.assertIn("= Đã có: 01. Công việc", out)
+        self.assertIn("+ Tạo mới: 01. Công việc / 1. Đang làm", out)
+        self.assertEqual(set(self.children("root")), {"01. Công việc"})
+        self.find_path(*self.PARENT, self.DOSSIER, "Quyển 1/3", "10.PDR- Điều lệ công ty")
+
+    def test_thu_muc_cha_ghi_de_duong_dan_cha(self):
+        self.run_script("tao_ho_so.py", str(self.write_cfg({"ten_thu_muc_goc": "Đích"})), "--dong-y")
+        target = self.find_path("Đích")["id"]
+        self.run_script("tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026",
+                        "--thu-muc-cha", target, "--dong-y")
+        self.find_path("Đích", self.DOSSIER)
+        self.assertNotIn("01. Công việc", self.children("root"))
+
+    def write_cfg(self, cfg):
+        path = self.tmp / f"cfg{len(list(self.tmp.glob('cfg*')))}.json"
+        path.write_text(json.dumps(cfg, ensure_ascii=False), encoding="utf-8")
+        return path
 
     def test_thieu_bien(self):
         out = self.run_script("tao_ho_so.py", self.CFG, "--chay-thu", expect=1)
@@ -92,7 +126,7 @@ class TaoHoSoTest(FakeDriveTest):
         ids = self.tmp / "ids.json"
 
         out = self.run_script(
-            "tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026",
+            "tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026", "--bien", "NAM=2026",
             "--tai-len", str(base), "--chia-se", "dongnghiep@gmail.com:sua",
             "--chia-se", "ai.do@khong-ton-tai.invalid", "--luu-id", str(ids), "--dong-y", expect=1,
         )
@@ -100,7 +134,7 @@ class TaoHoSoTest(FakeDriveTest):
         self.assertIn("Không chia sẻ được cho ai.do@khong-ton-tai.invalid", out)
 
         files = self.drive()["files"]
-        root = self.children("root", files)["Tài liệu PDR - Phát hành thêm cổ phiếu cho cổ đông hiện hữu _19052026"]
+        root = self.find_path(*self.PARENT, self.DOSSIER, files=files)
         top = self.children(root["id"], files)
         self.assertEqual(
             set(top),
@@ -119,7 +153,7 @@ class TaoHoSoTest(FakeDriveTest):
         # Chạy lại: không tạo trùng thư mục, không tải lại file, không chia sẻ lại.
         before = len(files)
         out = self.run_script(
-            "tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026",
+            "tao_ho_so.py", self.CFG, "--bien", "MA_CK=PDR", "--bien", "NGAY=19052026", "--bien", "NAM=2026",
             "--tai-len", str(base), "--chia-se", "dongnghiep@gmail.com:writer", "--dong-y",
         )
         self.assertEqual(len(self.drive()["files"]), before)
@@ -135,6 +169,52 @@ class TaoHoSoTest(FakeDriveTest):
         roots = [f for f in self.drive()["files"].values() if f["name"] == "Nhà O'Neil"]
         self.assertEqual(len(roots), 1)
         self.assertEqual(list(self.children(roots[0]["id"])), ["A\\B"])
+
+
+class KiemTraChiaSeTest(FakeDriveTest):
+    def seed(self):
+        """Thư mục H có 2 file mở link công khai và 1 file riêng tư; ngoài H có thêm 1 file công khai."""
+        state = {
+            "files": {
+                "root": {"id": "root", "name": "My Drive", "mimeType": "application/vnd.google-apps.folder", "parents": []},
+                "H": {"id": "H", "name": "Hộ chiếu", "mimeType": "application/vnd.google-apps.folder", "parents": ["root"]},
+                "a": {"id": "a", "name": "Hochieu_A.pdf", "mimeType": "application/pdf", "parents": ["H"]},
+                "b": {"id": "b", "name": "Hochieu_B.pdf", "mimeType": "application/pdf", "parents": ["H"]},
+                "c": {"id": "c", "name": "Riêng tư.pdf", "mimeType": "application/pdf", "parents": ["H"]},
+                "d": {"id": "d", "name": "Bài thuyết trình.pdf", "mimeType": "application/pdf", "parents": ["root"]},
+            },
+            "perms": {
+                "a": [{"id": "anyoneWithLink", "type": "anyone", "role": "reader"},
+                      {"id": "p1", "type": "user", "role": "writer", "emailAddress": "dongnghiep@gmail.com"}],
+                "b": [{"id": "anyoneWithLink", "type": "anyone", "role": "reader"}],
+                "c": [{"id": "p2", "type": "user", "role": "reader", "emailAddress": "x@gmail.com"}],
+                "d": [{"id": "anyoneWithLink", "type": "anyone", "role": "reader"}],
+            },
+        }
+        self.state.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+
+    def test_liet_ke_khong_doi_gi(self):
+        self.seed()
+        out = self.run_script("kiem_tra_chia_se.py")
+        self.assertIn("3 file đang mở link công khai", out)
+        self.assertIn("Bài thuyết trình.pdf", out)
+        self.assertNotIn("Riêng tư.pdf", out)
+        self.assertFalse(any(c[:3] == ["drive", "permissions", "delete"] for c in self.calls()))
+
+    def test_tat_trong_mot_thu_muc(self):
+        self.seed()
+        self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--tat", expect=1)  # không có bàn phím → huỷ
+        self.assertEqual(len(self.drive()["perms"]["a"]), 2)
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--tat", "--dong-y")
+        self.assertIn("tắt 2/2 file", out)
+        perms = self.drive()["perms"]
+        self.assertEqual([p["id"] for p in perms["a"]], ["p1"])  # quyền đích danh vẫn giữ
+        self.assertEqual(perms["b"], [])
+        self.assertEqual(len(perms["d"]), 1)  # file ngoài thư mục không bị đụng tới
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H")
+        self.assertIn("Không có file nào", out)
 
 
 class TaoTaiLieuTest(FakeDriveTest):
