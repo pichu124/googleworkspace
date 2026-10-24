@@ -207,7 +207,7 @@ class KiemTraChiaSeTest(FakeDriveTest):
         self.assertEqual(len(self.drive()["perms"]["a"]), 2)
 
         out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--tat", "--dong-y")
-        self.assertIn("tắt 2/2 file", out)
+        self.assertIn("tắt 2/2 file/thư mục", out)
         perms = self.drive()["perms"]
         self.assertEqual([p["id"] for p in perms["a"]], ["p1"])  # quyền đích danh vẫn giữ
         self.assertEqual(perms["b"], [])
@@ -215,6 +215,49 @@ class KiemTraChiaSeTest(FakeDriveTest):
 
         out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H")
         self.assertIn("Không có file nào", out)
+
+    def test_de_quy_chi_xoa_quyen_dat_truc_tiep(self):
+        self.seed()
+        state = self.drive()
+        inherited = {"id": "anyoneWithLink", "type": "anyone", "role": "writer",
+                     "permissionDetails": [{"inherited": True}]}
+        state["files"]["S"] = {"id": "S", "name": "Con", "mimeType": "application/vnd.google-apps.folder", "parents": ["H"]}
+        state["files"]["e"] = {"id": "e", "name": "cmt.jpg", "mimeType": "image/jpeg", "parents": ["S"]}
+        state["perms"]["S"] = [{"id": "anyoneWithLink", "type": "anyone", "role": "writer",
+                                "permissionDetails": [{"inherited": False}]}]
+        state["perms"]["e"] = [inherited]
+        self.state.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H")
+        self.assertNotIn("cmt.jpg", out)  # không đệ quy thì không thấy file trong thư mục con
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--de-quy")
+        self.assertIn("cmt.jpg  (writer)  [theo thư mục cha]", out)
+
+        out = self.run_script("kiem_tra_chia_se.py", "--id", "e", "--tat", "--dong-y")
+        self.assertIn("Hãy tắt ở thư mục cha", out)
+        self.assertFalse(any(c[:3] == ["drive", "permissions", "delete"] for c in self.calls()))
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--de-quy", "--tat", "--dong-y")
+        self.assertIn("tắt 3/3 file/thư mục", out)  # a, b và thư mục Con; bỏ qua cmt.jpg
+        deleted = [json.loads(c[c.index("--params") + 1])["fileId"]
+                   for c in self.calls() if c[:3] == ["drive", "permissions", "delete"]]
+        self.assertEqual(sorted(deleted), ["S", "a", "b"])
+
+    def test_quyen_ke_thua_khong_ghi_ro_van_xu_ly_dung(self):
+        # Drive không trả permissionDetails: script tưởng là quyền trực tiếp, xoá ở thư mục trước,
+        # xoá ở file con thì lỗi 404 vì quyền đã mất theo thư mục → phải tính là xong, không báo lỗi.
+        self.seed()
+        state = self.drive()
+        state["files"]["S"] = {"id": "S", "name": "Con", "mimeType": "application/vnd.google-apps.folder", "parents": ["root"]}
+        state["files"]["e"] = {"id": "e", "name": "cmt.jpg", "mimeType": "image/jpeg", "parents": ["S"]}
+        state["perms"]["S"] = [{"id": "anyoneWithLink", "type": "anyone", "role": "writer"}]
+        state["perms"]["e"] = [{"id": "anyoneWithLink", "type": "anyone", "role": "writer", "inheritedFrom": "S"}]
+        self.state.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "S", "--de-quy", "--tat", "--dong-y")
+        self.assertIn("Đã hết công khai theo thư mục cha: cmt.jpg", out)
+        self.assertIn("tắt 2/2 file/thư mục", out)
+        self.assertEqual(self.drive()["perms"]["e"], [])
 
 
 class TaoTaiLieuTest(FakeDriveTest):

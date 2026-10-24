@@ -160,6 +160,16 @@ def main(argv):
             rc = fail(404, "Permission not found")
         else:
             state["perms"][params["fileId"]] = [p for p in perms if p["id"] != params["permissionId"]]
+            # Như Drive: quyền "anyone" của thư mục mất thì các file bên trong cũng mất quyền kế thừa đó.
+            if params["permissionId"] == "anyoneWithLink":
+                stack = [params["fileId"]]
+                while stack:
+                    parent = stack.pop()
+                    for f in files.values():
+                        if parent in f["parents"]:
+                            stack.append(f["id"])
+                            state["perms"][f["id"]] = [p for p in state["perms"].get(f["id"], [])
+                                                       if not p.get("inheritedFrom") == params["fileId"]]
     elif cmd == ("docs", "documents", "get"):
         text = files[params["documentId"]]["text"]
         # Cắt chữ thành nhiều textRun, cố ý cắt ngang chỗ trống để thử việc ghép chữ.

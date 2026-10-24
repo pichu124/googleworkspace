@@ -181,11 +181,15 @@ python3 scripts/tao_tai_lieu_tu_mau.py tao --mau TEMPLATE_ID --sheet SHEET_ID --
 # Liệt kê mọi file bạn sở hữu đang để "Bất kỳ ai có đường liên kết" (chỉ xem, không đổi gì)
 python3 scripts/kiem_tra_chia_se.py
 
-# Tắt link công khai của các file nằm ngay trong một thư mục
-python3 scripts/kiem_tra_chia_se.py --thu-muc <FOLDER_ID> --tat
+# Tắt link công khai của một thư mục và mọi thứ bên trong
+python3 scripts/kiem_tra_chia_se.py --thu-muc <FOLDER_ID> --de-quy --tat
+
+# Tắt cho đúng vài file/thư mục
+python3 scripts/kiem_tra_chia_se.py --id <ID_1> --id <ID_2> --tat
 ```
 
-Tắt link công khai không ảnh hưởng tới người được chia sẻ đích danh qua email: họ vẫn mở được như cũ.
+- Tắt link công khai không ảnh hưởng tới người được chia sẻ đích danh qua email: họ vẫn mở được như cũ.
+- File chỉ công khai vì nằm trong thư mục đang công khai được ghi `[theo thư mục cha]`. Tắt ở thư mục cha thì các file đó hết công khai theo.
 
 ---
 
