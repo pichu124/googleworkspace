@@ -91,8 +91,11 @@ def main(argv):
     def out(obj):
         print(json.dumps(obj, ensure_ascii=False))
 
-    def fail(code, msg, exit_code=1):
-        out({"error": {"code": code, "message": msg}})
+    def fail(code, msg, exit_code=1, reason=None):
+        err = {"code": code, "message": msg}
+        if reason:
+            err["reason"] = reason
+        out({"error": err})
         return exit_code
 
     cmd = tuple(pos)
@@ -156,8 +159,13 @@ def main(argv):
             out({"id": perm["id"]})
     elif cmd == ("drive", "permissions", "delete"):
         perms = state["perms"].get(params["fileId"], [])
-        if not any(p["id"] == params["permissionId"] for p in perms):
+        target = next((p for p in perms if p["id"] == params["permissionId"]), None)
+        if target is None:
             rc = fail(404, "Permission not found")
+        elif target.get("locked", 0) > 0:
+            # Như Drive khi quyền của thư mục cha chưa cập nhật xong: từ chối vài lần rồi mới cho xoá.
+            target["locked"] -= 1
+            rc = fail(403, "The authenticated user cannot delete the permission.", reason="cannotDeletePermission")
         else:
             state["perms"][params["fileId"]] = [p for p in perms if p["id"] != params["permissionId"]]
             # Như Drive: quyền "anyone" của thư mục mất thì các file bên trong cũng mất quyền kế thừa đó.

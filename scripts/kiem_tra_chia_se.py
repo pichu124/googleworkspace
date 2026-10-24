@@ -21,7 +21,9 @@ hãy tắt ở thư mục cha đó (mọi file bên trong sẽ hết công khai 
 from __future__ import annotations
 
 import argparse
+import os
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -32,6 +34,10 @@ PUBLIC_QUERY = (
     "'me' in owners and trashed = false"
     " and (visibility = 'anyoneWithLink' or visibility = 'anyoneCanFind')"
 )
+# Tắt ở thư mục cha xong, Drive cần một lúc mới cập nhật quyền của thư mục con; trong lúc đó
+# xoá quyền ở thư mục con bị từ chối (cannotDeletePermission). Chờ rồi thử lại vài lần.
+ATTEMPTS = 4
+RETRY_WAIT = float(os.environ.get("KIEM_TRA_CHIA_SE_CHO", "15"))
 
 
 def walk(folder_id: str, recursive: bool) -> list[dict]:
@@ -75,6 +81,29 @@ def is_inherited(perm: dict) -> bool:
     """Quyền chỉ đến từ thư mục cha (không đặt trực tiếp trên file) thì không xoá được ở file."""
     details = perm.get("permissionDetails") or []
     return bool(details) and all(d.get("inherited") for d in details)
+
+
+def turn_off(file_id: str, perms: list[dict] | None = None) -> bool:
+    """Xoá quyền công khai đặt trực tiếp trên file. Trả về False nếu file đã hết công khai từ trước."""
+    for attempt in range(1, ATTEMPTS + 1):
+        if perms is None:
+            perms = [p for p in public_permissions(file_id) if not is_inherited(p)]
+        if not perms:
+            return False
+        try:
+            for p in perms:
+                gws(
+                    "drive", "permissions", "delete",
+                    params={"fileId": file_id, "permissionId": p["id"], "supportsAllDrives": True},
+                )
+            return True
+        except GwsError as e:
+            if "cannotDeletePermission" not in str(e) or attempt == ATTEMPTS:
+                raise
+            print(f"    … Drive chưa cập nhật xong quyền từ thư mục cha, chờ {RETRY_WAIT:g} giây rồi thử lại")
+            time.sleep(RETRY_WAIT)
+            perms = None
+    return True
 
 
 def confirm(question: str) -> bool:
@@ -136,18 +165,11 @@ def main(argv: list[str] | None = None) -> int:
     errors = 0
     for i, (f, perms) in enumerate(direct):
         try:
-            if i:
-                # Thư mục cha vừa tắt ở bước trước có thể đã kéo theo file này: đọc lại quyền hiện tại.
-                perms = [p for p in public_permissions(f["id"]) if not is_inherited(p)]
-                if not perms:
-                    print(f"  ✓ Đã hết công khai theo thư mục cha: {f['name']}")
-                    continue
-            for p in perms:
-                gws(
-                    "drive", "permissions", "delete",
-                    params={"fileId": f["id"], "permissionId": p["id"], "supportsAllDrives": True},
-                )
-            print(f"  ✓ Đã tắt: {f['name']}")
+            # Từ file thứ hai trở đi, đọc lại quyền: thư mục cha vừa tắt có thể đã kéo theo file này.
+            if turn_off(f["id"], perms if i == 0 else None):
+                print(f"  ✓ Đã tắt: {f['name']}")
+            else:
+                print(f"  ✓ Đã hết công khai theo thư mục cha: {f['name']}")
         except GwsError as e:
             errors += 1
             print(f"  ✗ Không tắt được {f['name']}: {e}")

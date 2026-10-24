@@ -243,6 +243,24 @@ class KiemTraChiaSeTest(FakeDriveTest):
                    for c in self.calls() if c[:3] == ["drive", "permissions", "delete"]]
         self.assertEqual(sorted(deleted), ["S", "a", "b"])
 
+    def test_drive_chua_cap_nhat_thi_cho_roi_thu_lai(self):
+        self.seed()
+        state = self.drive()
+        state["perms"]["b"][0]["locked"] = 2  # bị từ chối 2 lần, lần thứ 3 mới xoá được
+        self.state.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+        self.env["KIEM_TRA_CHIA_SE_CHO"] = "0"
+
+        out = self.run_script("kiem_tra_chia_se.py", "--thu-muc", "H", "--tat", "--dong-y")
+        self.assertEqual(out.count("chờ 0 giây rồi thử lại"), 2)
+        self.assertIn("tắt 2/2 file/thư mục", out)
+        self.assertEqual(self.drive()["perms"]["b"], [])
+
+        state = self.drive()
+        state["perms"]["b"] = [{"id": "anyoneWithLink", "type": "anyone", "role": "reader", "locked": 9}]
+        self.state.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+        out = self.run_script("kiem_tra_chia_se.py", "--id", "b", "--tat", "--dong-y", expect=1)
+        self.assertIn("Không tắt được Hochieu_B.pdf", out)  # thử đủ số lần mà vẫn bị từ chối → báo lỗi
+
     def test_quyen_ke_thua_khong_ghi_ro_van_xu_ly_dung(self):
         # Drive không trả permissionDetails: script tưởng là quyền trực tiếp, xoá ở thư mục trước,
         # xoá ở file con thì lỗi 404 vì quyền đã mất theo thư mục → phải tính là xong, không báo lỗi.
