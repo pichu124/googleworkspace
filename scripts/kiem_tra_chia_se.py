@@ -134,8 +134,14 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     errors = 0
-    for f, perms in direct:
+    for i, (f, perms) in enumerate(direct):
         try:
+            if i:
+                # Thư mục cha vừa tắt ở bước trước có thể đã kéo theo file này: đọc lại quyền hiện tại.
+                perms = [p for p in public_permissions(f["id"]) if not is_inherited(p)]
+                if not perms:
+                    print(f"  ✓ Đã hết công khai theo thư mục cha: {f['name']}")
+                    continue
             for p in perms:
                 gws(
                     "drive", "permissions", "delete",
@@ -143,14 +149,6 @@ def main(argv: list[str] | None = None) -> int:
                 )
             print(f"  ✓ Đã tắt: {f['name']}")
         except GwsError as e:
-            # Quyền kế thừa có thể đã mất theo thư mục cha vừa tắt ở bước trước.
-            try:
-                still_public = public_permissions(f["id"])
-            except GwsError:
-                still_public = perms
-            if not still_public:
-                print(f"  ✓ Đã hết công khai theo thư mục cha: {f['name']}")
-                continue
             errors += 1
             print(f"  ✗ Không tắt được {f['name']}: {e}")
     print(f"\nXong: tắt {len(direct) - errors}/{len(direct)} file/thư mục.")
